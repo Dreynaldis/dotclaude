@@ -83,5 +83,23 @@ case "$OS" in
     ;;
 esac
 
+# ── Shell alias ───────────────────────────────────────────────────────────────
+# Detect rc file: .zshrc on macOS/zsh, .bashrc everywhere else
+if [ "$OS" = "Darwin" ] || [ "${SHELL:-}" = "/bin/zsh" ] || [ "${SHELL:-}" = "/usr/bin/zsh" ]; then
+  SHELL_RC="$HOME/.zshrc"
+else
+  SHELL_RC="$HOME/.bashrc"
+fi
+
+ALIAS_LINE="alias dotclaude='cd \"$REPO\"'"
+
+if grep -qF "alias dotclaude=" "$SHELL_RC" 2>/dev/null; then
+  echo "Alias 'dotclaude' already in $SHELL_RC — skipped."
+else
+  printf '\n# dotclaude — jump to claude config repo\n%s\n' "$ALIAS_LINE" >> "$SHELL_RC"
+  echo "Added alias 'dotclaude' to $SHELL_RC"
+  echo "  Run: source $SHELL_RC  (or open a new terminal)"
+fi
+
 echo ""
 echo "Done. Claude config is live."
