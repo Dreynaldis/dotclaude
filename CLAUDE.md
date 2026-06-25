@@ -61,6 +61,17 @@ architecture/scale/maintainability concerns before they're pointed out.
 - At the start of work in a project, if `PROGRESS.md`, `TODO.md`, or a `docs/decisions`
   folder exist at the repo root, read them first and keep them updated.
 - Keep durable state in files (progress, decisions/ADRs), not just in conversation.
+- When doing bug fixes, reproduce the bug in an E2E setting first before writing any fix.
+
+## Style & Process
+
+- Never use em dashes (—). Use a plain dash (-) or double dash (--) instead.
+- When writing commit messages, do not add a co-author line for yourself.
+- When writing or substantially editing long markdown files, put each full sentence on its
+  own line. Preserve normal markdown structure but never wrap multiple sentences onto one
+  physical line.
+- If you notice off-scope lint errors, test failures, or broken UI while working, flag them
+  -- don't silently fix them unless asked.
 # graphify
 - **graphify** (`~/.claude/skills/graphify/SKILL.md`) - any input to knowledge graph. Trigger: `/graphify`
 When the user types `/graphify`, invoke the Skill tool with `skill: "graphify"` before doing anything else.
