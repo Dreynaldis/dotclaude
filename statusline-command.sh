@@ -83,7 +83,7 @@ repo_root=$(cd "$effective_dir" 2>/dev/null && git rev-parse --show-toplevel 2>/
 dir_display=$(basename "${repo_root:-$effective_dir}")
 
 if [ -n "$effort" ]; then
-  printf "🤖 %s | 💪 %s | 🪙 %s tok | ⏱️ %s\n📁 %s | 🌿 %s | 🧠 %s" "$model" "$effort" "$tokens_str" "$rate_limit_str" "$dir_display" "$git_str" "$usage_str"
+  printf "🤖 %s | 💪 %s | 🧠 %s | 🪙 %s tok\n📁 %s | 🌿 %s | ⏱️ %s" "$model" "$effort" "$usage_str" "$tokens_str" "$dir_display" "$git_str" "$rate_limit_str"
 else
-  printf "🤖 %s | 🪙 %s tok | ⏱️ %s\n📁 %s | 🌿 %s | 🧠 %s" "$model" "$tokens_str" "$rate_limit_str" "$dir_display" "$git_str" "$usage_str"
+  printf "🤖 %s | 🧠 %s | 🪙 %s tok\n📁 %s | 🌿 %s | ⏱️ %s" "$model" "$usage_str" "$tokens_str" "$dir_display" "$git_str" "$rate_limit_str"
 fi
