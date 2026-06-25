@@ -4,7 +4,6 @@ input=$(cat)
 model=$(echo "$input" | jq -r '.model.display_name // "Unknown Model"')
 effort=$(echo "$input" | jq -r '.effort.level // empty')
 used=$(echo "$input" | jq -r '.context_window.used_percentage // empty')
-worktree=$(echo "$input" | jq -r '.worktree.name // empty')
 total_input_tokens=$(echo "$input" | jq -r '.context_window.total_input_tokens // empty')
 total_output_tokens=$(echo "$input" | jq -r '.context_window.total_output_tokens // empty')
 current_dir=$(echo "$input" | jq -r '.worktree.original_cwd // empty')
@@ -18,12 +17,6 @@ if [ -n "$used" ]; then
   usage_str="${used_display}%"
 else
   usage_str="0%"
-fi
-
-if [ -n "$worktree" ]; then
-  worktree_str="${worktree}"
-else
-  worktree_str="no worktree"
 fi
 
 GREEN='\033[32m'
@@ -85,11 +78,12 @@ rate_limit_str=""
 rate_limit_str="${rate_limit_str}$(format_rl "$rl_5h_pct" "$rl_5h_reset" "5h")"
 # rate_limit_str="${rate_limit_str}$(format_rl "$rl_7d_pct" "$rl_7d_reset" "7d")"
 
-repo_root=$(cd "$current_dir" 2>/dev/null && git rev-parse --show-toplevel 2>/dev/null || echo "$current_dir")
-dir_display=$(basename "$repo_root")
+effective_dir="${current_dir:-$(pwd)}"
+repo_root=$(cd "$effective_dir" 2>/dev/null && git rev-parse --show-toplevel 2>/dev/null)
+dir_display=$(basename "${repo_root:-$effective_dir}")
 
 if [ -n "$effort" ]; then
-  printf "🤖 %s | 💪 %s | 🧠 %s | 🪙 %s tok | ⏱️ %s\n📁 %s | 🌳 %s | 🌿 %s" "$model" "$effort" "$usage_str" "$tokens_str" "$rate_limit_str" "$dir_display" "$worktree_str" "$git_str"
+  printf "🤖 %s | 💪 %s | 🪙 %s tok | ⏱️ %s\n📁 %s | 🌿 %s | 🧠 %s" "$model" "$effort" "$tokens_str" "$rate_limit_str" "$dir_display" "$git_str" "$usage_str"
 else
-  printf "🤖 %s | 🧠 %s | 🪙 %s tok | ⏱️ %s\n📁 %s | 🌳 %s | 🌿 %s" "$model" "$usage_str" "$tokens_str" "$rate_limit_str" "$dir_display" "$worktree_str" "$git_str"
+  printf "🤖 %s | 🪙 %s tok | ⏱️ %s\n📁 %s | 🌿 %s | 🧠 %s" "$model" "$tokens_str" "$rate_limit_str" "$dir_display" "$git_str" "$usage_str"
 fi
