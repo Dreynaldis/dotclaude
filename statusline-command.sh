@@ -5,7 +5,8 @@ model=$(echo "$input" | jq -r '.model.display_name // "Unknown Model"')
 effort=$(echo "$input" | jq -r '.effort.level // empty')
 used=$(echo "$input" | jq -r '.context_window.used_percentage // empty')
 worktree=$(echo "$input" | jq -r '.worktree.name // empty')
-total_cost=$(echo "$input" | jq -r '.cost.total_cost_usd // empty')
+total_input_tokens=$(echo "$input" | jq -r '.context_window.total_input_tokens // empty')
+total_output_tokens=$(echo "$input" | jq -r '.context_window.total_output_tokens // empty')
 current_dir=$(echo "$input" | jq -r '.worktree.original_cwd // empty')
 rl_5h_pct=$(echo "$input" | jq -r '.rate_limits.five_hour.used_percentage // empty' | awk '{printf "%.0f", $1}')
 rl_5h_reset=$(echo "$input" | jq -r '.rate_limits.five_hour.resets_at // empty')
@@ -45,11 +46,13 @@ else
 fi
 
 
-if [ -n "$total_cost" ]; then
-  cost_display=$(awk "BEGIN { printf \"%.2f\", $total_cost }")
-  block_str="\$${cost_display}"
+if [ -n "$total_input_tokens" ] && [ -n "$total_output_tokens" ]; then
+  total_tokens=$(( total_input_tokens + total_output_tokens ))
+  tokens_str=$(awk "BEGIN { printf \"%.1fk\", $total_tokens / 1000 }")
+elif [ -n "$total_input_tokens" ]; then
+  tokens_str=$(awk "BEGIN { printf \"%.1fk\", $total_input_tokens / 1000 }")
 else
-  block_str="\$0.00"
+  tokens_str="0.0k"
 fi
 
 make_bar() {
@@ -86,7 +89,7 @@ repo_root=$(cd "$current_dir" 2>/dev/null && git rev-parse --show-toplevel 2>/de
 dir_display=$(basename "$repo_root")
 
 if [ -n "$effort" ]; then
-  printf "🤖 %s | 💪 %s | 🧠 %s | 💰 %s | ⏱️ %s\n📁 %s | 🌳 %s | 🌿 %s" "$model" "$effort" "$usage_str" "$block_str" "$rate_limit_str" "$dir_display" "$worktree_str" "$git_str"
+  printf "🤖 %s | 💪 %s | 🧠 %s | 🪙 %s tok | ⏱️ %s\n📁 %s | 🌳 %s | 🌿 %s" "$model" "$effort" "$usage_str" "$tokens_str" "$rate_limit_str" "$dir_display" "$worktree_str" "$git_str"
 else
-  printf "🤖 %s | 🧠 %s | 💰 %s | ⏱️ %s\n📁 %s | 🌳 %s | 🌿 %s" "$model" "$usage_str" "$block_str" "$rate_limit_str" "$dir_display" "$worktree_str" "$git_str"
+  printf "🤖 %s | 🧠 %s | 🪙 %s tok | ⏱️ %s\n📁 %s | 🌳 %s | 🌿 %s" "$model" "$usage_str" "$tokens_str" "$rate_limit_str" "$dir_display" "$worktree_str" "$git_str"
 fi
