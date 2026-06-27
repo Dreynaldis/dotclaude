@@ -5,8 +5,7 @@ in each project's own `CLAUDE.md` and layer on top of this.
 
 ## About Me
 
-Full-stack developer, backend-leaning. **Just started learning NestJS** — explain NestJS-specific
-patterns when they come up; don't assume familiarity.
+Full-stack developer, backend-leaning. open to more language other than current tech stacks (node.js, express, typescript, nest.js) 
 
 - **Environment:** Windows 11. Main terminal is WezTerm running Git Bash (primary shell);
   PowerShell also available. Default to Bash/POSIX syntax for commands.
