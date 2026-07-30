@@ -13,7 +13,7 @@ Clone once, run `install.sh`, and your full Claude setup is live. Pull to sync u
 | `CLAUDE.md` | Global standing instructions for every Claude Code session |
 | `settings.json` | Preferences: model, theme, effort level, status line |
 | `statusline-command.sh` | Custom terminal status line script |
-| `skills/` | 8 global skills (see below) |
+| `skills/` | 7 global skills (see below) |
 | `agents/` | Custom agents |
 
 ### Skills
@@ -22,9 +22,8 @@ Clone once, run `install.sh`, and your full Claude setup is live. Pull to sync u
 |---|---|---|
 | `adr` | `/adr` | Write an Architecture Decision Record |
 | `diagnosing-bugs` | `/diagnosing-bugs` | 6-phase debugging protocol — feedback loop first, hypothesis second |
-| `domain-modeling` | `/domain-modeling` | Build and maintain a project glossary (`CONTEXT.md`) and ADRs |
 | `graphify` | `/graphify` | Turn a codebase into a queryable knowledge graph |
-| `grill-with-docs` | `/grill-with-docs` | Relentless design interview — surfaces assumptions, writes ADRs as decisions crystallize |
+| `grill-with-docs` | `/grill-with-docs` | Relentless design interview -- surfaces assumptions, maintains the `CONTEXT.md` glossary, writes ADRs as decisions crystallize |
 | `prd` | `/prd` | Write or update a Product Requirements Document |
 | `tdd` | `/tdd` | Test-driven development via vertical slices (one test → one impl → repeat) |
 | `tech-spec` | `/tech-spec` | Write a technical design doc / RFC before building |
