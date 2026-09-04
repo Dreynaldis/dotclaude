@@ -9,5 +9,7 @@
   },
   "effortLevel": "medium",
   "autoUpdatesChannel": "latest",
-  "theme": "dark"
+  "theme": "dark",
+  "editorMode": "normal",
+  "fileCheckpointingEnabled": false
 }
