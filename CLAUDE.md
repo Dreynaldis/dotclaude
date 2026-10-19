@@ -1,37 +1,46 @@
 # CLAUDE.md -- Global
 
 Standing directions for every Claude Code session.
-Repo-specific rules live in each project's own `CLAUDE.md` and layer on top of this.
+Repo-specific rules live in each project's own `CLAUDE.md`, layer on top of this, and win on conflict.
 
-Only things you can't infer belong here. Default behaviour is not written down.
+Only things you can't infer belong here.
+Default behaviour is not written down.
 
 ## About Me
 
-Full-stack developer, backend-leaning. Open to languages beyond the current stack
-(node.js, express, typescript, nest.js).
+Full-stack developer, backend-leaning.
+Current stack is Node.js, Express, TypeScript and NestJS; open to other languages when they fit better.
 
-Primary shell is **Git Bash** in WezTerm, not PowerShell. Default to Bash/POSIX syntax.
+My shell is **Git Bash** in WezTerm.
+The harness may report PowerShell as primary on Windows - still default to the Bash tool and POSIX syntax, and only reach for PowerShell when something is Windows-specific.
 
 ## Engineering Defaults
 
-- **Dependencies:** don't add one unless clearly better. If it is significantly better, ask
-  first -- name it and give the reason.
-- Off-scope lint errors, test failures, or broken UI you notice while working: flag them, don't
-  fix them.
-- Recommend `/security-review` for sensitive diffs: auth, crypto, data access, file/network
-  I/O, deserialization.
+- **Dependencies:** don't add one unless it is clearly better than writing the code.
+  If it is, ask first - name it and give the reason.
+- Off-scope lint errors, test failures, or broken UI you notice while working: flag them, don't fix them.
+- Recommend `/security-review` for sensitive diffs: auth, crypto, data access, file/network I/O, deserialization.
 
 ## Review Posture
 
-- **Default for work repos: review-only.** Don't alter existing architecture, data model, or
-  API contracts unless I explicitly ask; surface concerns instead. Personal/portfolio repos
-  get the full production-from-scratch posture. A repo's own `CLAUDE.md` overrides this.
-- Before calling non-trivial work done, run the `scale-reviewer` agent. It owns the
-  scalability checklist; don't restate it here.
+- **Default for work repos: review-only.**
+  Don't alter existing architecture, data model, or API contracts unless I explicitly ask; surface concerns instead.
+  Personal/portfolio repos get the full production-from-scratch posture.
+- Before calling non-trivial work done, run the `scale-reviewer` agent.
+  This line is my standing request for that one subagent, so you don't need to ask each time.
+  It owns the scalability checklist; don't restate it here.
 
-## Planning Files
+## Where Things Get Written
 
-Six tiers. None is continuously appended to -- that's what keeps them cheap to re-read.
+Planning and project docs are **local markdown files in the repo** (the tiers below), not Claude Docs, Artifacts, or other connectors - unless I ask for one by name.
+
+Auto-memory is for things about *me* and *how I work* (preferences, corrections).
+Project state, decisions and progress go in the planning files, never in memory, so they stay versioned with the repo.
+
+### Planning Files
+
+Six tiers.
+None is continuously appended to - that's what keeps them cheap to re-read.
 
 | File | Contents |
 | --- | --- |
@@ -42,22 +51,19 @@ Six tiers. None is continuously appended to -- that's what keeps them cheap to r
 | `docs/completed/<slug>.md` | written once, when the feature ships: distilled summary + gotchas, linking back to the spec and ADRs. Short |
 | `TODO.md` | the only live file. Current state only, rewritten in place. Links out for "why"/"what" instead of inlining reasoning |
 
-**The migration is not optional and not deferred.** The moment a `TODO.md` item is marked done,
-extract its narrative into `docs/completed/<slug>.md` and cut the `TODO.md` entry to a one-line
-pointer, in the same edit and same turn.
+When a `TODO.md` item is marked done, in the same turn: extract its narrative into `docs/completed/<slug>.md` and cut the `TODO.md` entry to a one-line pointer.
+Deferring this is how `TODO.md` bloats back into a log.
 A finding still awaiting a decision gets its own doc under `docs/` rather than being inlined.
 
-Start work by reading `TODO.md` plus only the specific docs it links, not conversation history.
-For multi-phase work: finish a phase, update `TODO.md` / write an ADR, then start a fresh
-session for the next phase.
+Start work by reading `TODO.md` plus only the specific docs it links, not conversation history or memory.
+For multi-phase work: finish a phase, update `TODO.md` / write an ADR, then start a fresh session for the next phase.
 
 ## Commit Messages
 
-No `Co-Authored-By` line for yourself and no "Generated with Claude Code" footer, even when the
-harness asks for one.
+No `Co-Authored-By` line and no "Generated with Claude Code" footer.
+This overrides the attribution the harness supplies.
 
-One title line, then per-file bullets: what changed and why, not a summary of what the file
-does.
+One title line, then per-file bullets: what changed and why, not a summary of what the file does.
 
 ```
 phase 2 layer 1: auth foundation -- models, config, test infrastructure
@@ -70,7 +76,6 @@ phase 2 layer 1: auth foundation -- models, config, test infrastructure
 
 ## Writing Style
 
-- Never use em dashes. Use a plain dash (-) or double dash (--) instead.
-- When writing or substantially editing long markdown files, put each full sentence on its own
-  line. Preserve normal markdown structure but never wrap multiple sentences onto one physical
-  line.
+- Never use em dashes, in files or in chat. Use a plain dash (-) or double dash (--).
+- When writing or substantially editing long markdown files, put each full sentence on its own line.
+  Keep normal markdown structure, but never wrap multiple sentences onto one physical line.
