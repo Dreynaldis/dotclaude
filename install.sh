@@ -18,7 +18,7 @@ echo "Claude config:  $CLAUDE"
 echo ""
 
 # Back up anything that already exists and isn't already a symlink/junction
-for target in CLAUDE.md settings.json statusline-command.sh skills agents; do
+for target in CLAUDE.md settings.json statusline-command.sh skills agents knowledge; do
   path="$CLAUDE/$target"
   if [ -e "$path" ] && [ ! -L "$path" ]; then
     mv "$path" "${path}.bak"
@@ -31,18 +31,19 @@ OS="$(uname -s)"
 case "$OS" in
   Linux|Darwin)
     # ── macOS / Linux ─────────────────────────────────────────────────────────
-    ln -sf "$REPO/CLAUDE.md"             "$CLAUDE/CLAUDE.md"
-    ln -sf "$REPO/settings.json"         "$CLAUDE/settings.json"
-    ln -sf "$REPO/statusline-command.sh" "$CLAUDE/statusline-command.sh"
-    ln -sf "$REPO/skills"                "$CLAUDE/skills"
-    ln -sf "$REPO/agents"                "$CLAUDE/agents"
+    ln -sfn "$REPO/CLAUDE.md"             "$CLAUDE/CLAUDE.md"
+    ln -sfn "$REPO/settings.json"         "$CLAUDE/settings.json"
+    ln -sfn "$REPO/statusline-command.sh" "$CLAUDE/statusline-command.sh"
+    ln -sfn "$REPO/skills"                "$CLAUDE/skills"
+    ln -sfn "$REPO/agents"                "$CLAUDE/agents"
+    ln -sfn "$REPO/knowledge"             "$CLAUDE/knowledge"
     echo "Symlinks created (ln -s)."
     ;;
 
   MINGW*|MSYS*|CYGWIN*)
     # ── Windows (Git Bash) ────────────────────────────────────────────────────
     # Directories: junctions — no Dev Mode needed
-    for dir in skills agents; do
+    for dir in skills agents knowledge; do
       if [ ! -e "$CLAUDE/$dir" ]; then
         cmd //c mklink //j "$(cygpath -w "$CLAUDE/$dir")" "$(cygpath -w "$REPO/$dir")" > /dev/null
         echo "Junction:  $CLAUDE/$dir"
@@ -51,24 +52,27 @@ case "$OS" in
       fi
     done
 
-    # Files: symlinks — need Developer Mode ON
-    DEVMODE_OK=false
-    if cmd //c mklink "$(cygpath -w "$CLAUDE/CLAUDE.md")" "$(cygpath -w "$REPO/CLAUDE.md")" > /dev/null 2>&1; then
-      DEVMODE_OK=true
-      cmd //c mklink "$(cygpath -w "$CLAUDE/settings.json")"         "$(cygpath -w "$REPO/settings.json")"         > /dev/null
-      cmd //c mklink "$(cygpath -w "$CLAUDE/statusline-command.sh")" "$(cygpath -w "$REPO/statusline-command.sh")" > /dev/null
-      echo "Symlinks:  CLAUDE.md, settings.json, statusline-command.sh"
-    else
-      cp "$REPO/CLAUDE.md"             "$CLAUDE/CLAUDE.md"
-      cp "$REPO/settings.json"         "$CLAUDE/settings.json"
-      cp "$REPO/statusline-command.sh" "$CLAUDE/statusline-command.sh"
+    # Files: symlinks — need Developer Mode ON. Already-linked files are
+    # skipped, so re-running never falls through to copying a file onto itself.
+    COPIED=false
+    for file in CLAUDE.md settings.json statusline-command.sh; do
+      if [ -L "$CLAUDE/$file" ]; then
+        echo "Skipped (linked): $CLAUDE/$file"
+      elif cmd //c mklink "$(cygpath -w "$CLAUDE/$file")" "$(cygpath -w "$REPO/$file")" > /dev/null 2>&1; then
+        echo "Symlink:   $CLAUDE/$file"
+      else
+        cp "$REPO/$file" "$CLAUDE/$file"
+        echo "Copied:    $CLAUDE/$file"
+        COPIED=true
+      fi
+    done
+
+    if [ "$COPIED" = true ]; then
       echo ""
       echo "WARNING: File symlinks failed — Developer Mode is OFF."
-      echo "  Files were COPIED instead. Edits to ~/.claude/CLAUDE.md etc."
-      echo "  will NOT sync back to the repo automatically."
-      echo ""
-      echo "  To fix: Settings → System → Developer Mode → ON"
-      echo "  Then re-run: bash install.sh"
+      echo "  Copied files will NOT sync back to the repo automatically."
+      echo "  To fix: Settings → System → Developer Mode → ON, delete the copies,"
+      echo "  then re-run: bash install.sh"
     fi
     ;;
 
@@ -79,16 +83,20 @@ case "$OS" in
     echo "  ln -s $REPO/statusline-command.sh $CLAUDE/statusline-command.sh"
     echo "  ln -s $REPO/skills                $CLAUDE/skills"
     echo "  ln -s $REPO/agents                $CLAUDE/agents"
+    echo "  ln -s $REPO/knowledge             $CLAUDE/knowledge"
     exit 1
     ;;
 esac
 
 # ── Shell alias ───────────────────────────────────────────────────────────────
-# Detect rc file: .zshrc on macOS/zsh, .bashrc everywhere else
+# Detect rc file: .zshrc on macOS/zsh. For bash, ~/.bashrc is a stub that
+# dotfiles/install.sh rewrites, so machine-specific lines like this alias (the
+# repo path differs per machine) go in ~/.bashrc.local, which the shared
+# dotfiles bashrc sources.
 if [ "$OS" = "Darwin" ] || [ "${SHELL:-}" = "/bin/zsh" ] || [ "${SHELL:-}" = "/usr/bin/zsh" ]; then
   SHELL_RC="$HOME/.zshrc"
 else
-  SHELL_RC="$HOME/.bashrc"
+  SHELL_RC="$HOME/.bashrc.local"
 fi
 
 ALIAS_LINE="alias dotclaude='cd \"$REPO\"'"

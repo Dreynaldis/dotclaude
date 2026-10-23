@@ -8,14 +8,12 @@ Default behaviour is not written down.
 
 ## About Me
 
-Full-stack developer, backend-leaning.
-Current stack is Node.js, Express, TypeScript and NestJS; open to other languages when they fit better.
-
-My shell is **Git Bash** in WezTerm.
-The harness may report PowerShell as primary on Windows - still default to the Bash tool and POSIX syntax, and only reach for PowerShell when something is Windows-specific.
+@~/.claude/knowledge/about-me.md
 
 ## Engineering Defaults
 
+- **Shell:** on Windows mine is **Git Bash** in WezTerm.
+  The harness may report PowerShell as primary - still default to the Bash tool and POSIX syntax, and only reach for PowerShell when something is Windows-specific.
 - **Dependencies:** don't add one unless it is clearly better than writing the code.
   If it is, ask first - name it and give the reason.
 - Off-scope lint errors, test failures, or broken UI you notice while working: flag them, don't fix them.
@@ -35,7 +33,11 @@ The harness may report PowerShell as primary on Windows - still default to the B
 Planning and project docs are **local markdown files in the repo** (the tiers below), not Claude Docs, Artifacts, or other connectors - unless I ask for one by name.
 
 Auto-memory is for things about *me* and *how I work* (preferences, corrections).
+Auto-memory is per directory and local to one machine, so anything that should follow me everywhere belongs in `about-me.md` instead - propose the move rather than saving it to memory.
 Project state, decisions and progress go in the planning files, never in memory, so they stay versioned with the repo.
+
+My career and project history lives in `~/.claude/knowledge/`, loaded on demand by the `recall` skill.
+If my background is relevant and the skill hasn't loaded, read `~/.claude/knowledge/README.md` and only the files it points to.
 
 ### Planning Files
 

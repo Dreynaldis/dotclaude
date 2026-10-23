@@ -11,5 +11,6 @@
   "autoUpdatesChannel": "latest",
   "theme": "dark",
   "editorMode": "normal",
-  "fileCheckpointingEnabled": false
+  "fileCheckpointingEnabled": false,
+  "idleCompaction": false
 }

@@ -13,8 +13,9 @@ Clone once, run `install.sh`, and your full Claude setup is live. Pull to sync u
 | `CLAUDE.md` | Global standing instructions for every Claude Code session |
 | `settings.json` | Preferences: model, theme, effort level, status line |
 | `statusline-command.sh` | Custom terminal status line script |
-| `skills/` | 7 global skills (see below) |
+| `skills/` | 8 global skills (see below) |
 | `agents/` | Custom agents |
+| `knowledge/` | `about-me.md` (imported by `CLAUDE.md`, always loaded) and career/project history (read on demand via `recall`) |
 
 ### Skills
 
@@ -25,6 +26,7 @@ Clone once, run `install.sh`, and your full Claude setup is live. Pull to sync u
 | `graphify` | `/graphify` | Turn a codebase into a queryable knowledge graph |
 | `grill-with-docs` | `/grill-with-docs` | Relentless design interview -- surfaces assumptions, maintains the `CONTEXT.md` glossary, writes ADRs as decisions crystallize |
 | `prd` | `/prd` | Write or update a Product Requirements Document |
+| `recall` | `/recall`, or automatic when past work is relevant | Load career/project history from `knowledge/` on demand |
 | `tdd` | `/tdd` | Test-driven development via vertical slices (one test → one impl → repeat) |
 | `tech-spec` | `/tech-spec` | Write a technical design doc / RFC before building |
 
